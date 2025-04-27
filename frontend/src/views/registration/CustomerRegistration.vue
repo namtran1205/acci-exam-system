@@ -1,15 +1,7 @@
 <template>
-    <div class="flex w-full h-screen flex-col">
-      <header class="bg-teal-600 text-white text-center py-2 font-bold text-xl">
-        ACME
-      </header>
   
-      <div class="flex flex-1 h-full ">
-        <div class="w-16 bg-lime-500"></div>
-  
-        <div class="flex-1 bg-lime-300 p-4 h-full">
-          <div class="bg-yellow-50 rounded-md h-full flex flex-col">
-            <div class="text-center py-3 font-semibold text-lg border-b border-gray-200">
+    
+            <div class="text-center py-3 font-bold text-lg border-b border-gray-200">
               Customers Registration
             </div>
   
@@ -76,10 +68,8 @@
                 <span class="rtl:rotate-180">→</span>
               </button>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
+
+
   </template>
   
   <script setup lang="ts">
@@ -113,3 +103,13 @@
     console.log(`Viewing customer with ID: ${id}`)
   }
   </script>
+
+  <style scoped>
+    html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+  </style>

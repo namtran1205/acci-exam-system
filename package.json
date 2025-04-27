@@ -10,6 +10,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "concurrently": "^9.1.2"
+    "concurrently": "^9.1.2",
+    "dotenv": "^16.5.0",
+    "drizzle-orm": "^0.43.1",
+    "pg": "^8.15.6",
+    "vuex": "^4.1.0"
+  },
+  "devDependencies": {
+    "@vue/runtime-core": "^3.0.0",
+    "tsx": "^4.19.3"
   }
 }
