@@ -2,7 +2,7 @@
 import TextField from "@/components/TextField.vue";
 import { ref } from "vue";
 
-const username = ref("Username");
+const username = ref("");
 const password = ref("");
 
 function hello() {

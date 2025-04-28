@@ -9,6 +9,21 @@ const router = createRouter({
       name: "ACCI | Login",
       component: LoginView,
     },
+    {
+      path: "/registration",
+      name: "registration",
+      component: () => import("../views/registration/CustomerRegistration.vue"),
+    },
+    {
+      path: "/registration/new_customer",
+      name: "new_customer",
+      component: () => import("../views/registration/NewCustomer.vue"),
+    },
+    {
+      path: "/registration/new_customer/individual",
+      name: "individual",
+      component: () => import("../views/registration/IndividualRegistration.vue"),
+    },
   ],
 });
 
