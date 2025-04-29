@@ -3,7 +3,7 @@
 
   <button
     @click="goBack"
-    class="mb-2 flex cursor-pointer items-center font-bold text-leaf hover:text-lime-900"
+    class="text-leaf mb-2 flex cursor-pointer items-center font-bold hover:text-lime-900"
   >
     <span class="mr-2 text-xl">&lt;</span>
     <span>Back</span>
@@ -50,7 +50,6 @@
     <button
       class="flex cursor-pointer items-center rounded-md bg-red-500 px-6 py-3 text-lg font-medium text-white hover:bg-red-600"
     >
-     
       <img src="/register_btn.png" class="mr-2 h-6 w-6" />
       Delete
     </button>
@@ -65,8 +64,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { useRouter, useRoute } from "vue-router";
+import { ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 const router = useRouter();
 const route = useRoute();
