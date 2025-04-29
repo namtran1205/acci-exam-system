@@ -4,10 +4,43 @@
     <meta charset="UTF-8" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./src/styles.css" />
-    <title>Vite App</title>
+    <meta
+      name="description"
+      content="Examination Scheduling SPA for the ACCI company, made to register clients and examinations and provide certificates in a system."
+    />
+    <title>ACCI Exam</title>
+
+    <meta name="og:title" content="ACCI Exam" />
+    <meta
+      name="og:description"
+      content="Examination Scheduling SPA for the ACCI company, made to register clients and examinations and provide certificates in a system."
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap"
+      rel="stylesheet"
+    />
   </head>
-  <body>
+
+  <style>
+    @media screen and (min-width: 1024px) {
+      body {
+        background: linear-gradient(
+          90deg,
+          var(--live-olive, #a9c46c) 0%,
+          var(--live-olive, #a9c46c) 10%,
+          #f4ffc3 10.07%,
+          #f4ffc3 90%,
+          #a9c46c 90%,
+          #a9c46c 100%
+        );
+      }
+    }
+  </style>
+
+  <body class="font-inter bg-australian-mint">
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>
