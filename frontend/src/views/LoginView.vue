@@ -4,6 +4,9 @@ import TextField from "@/components/TextField.vue";
 import { makeJsonHeader, PUBLIC_API } from "@/services/main";
 import { useProfileStore } from "@/stores/profile";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const username = ref("");
 const password = ref("");
@@ -19,6 +22,8 @@ async function login() {
 
   const res = await fetch(`${PUBLIC_API}/login`, {
     method: "POST",
+    credentials: "include",
+    mode: "cors",
     headers: makeJsonHeader(),
     body: JSON.stringify({ username: username.value, password: password.value }),
   });
@@ -38,9 +43,7 @@ async function login() {
       errorDescription.value = "The password you provided was incorrect.";
       break;
     case 200:
-      const json = await res.json();
-      window.sessionStorage.setItem("token", json.token);
-      profile.name = json.name;
+      router.replace({ path: "/" });
       break;
   }
 }

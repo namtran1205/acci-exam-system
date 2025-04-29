@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 
 interface ProfileState {
   name?: string;
+  role?: "acceptance" | "data" | "accounting" | "admin";
 }
 
 /**
@@ -9,4 +10,9 @@ interface ProfileState {
  */
 export const useProfileStore = defineStore("profile", {
   state: () => ({ name: undefined }) as ProfileState,
+  actions: {
+    setName(name: string) {
+      this.name = name;
+    },
+  },
 });

@@ -18,7 +18,6 @@ import { findAccountByUsername } from "../services/accounts.service";
  *   - 200: With the token
  */
 export const loginController = expressAsyncHandler(async (req, res) => {
-  console.log(req.body);
   const schema = z.object({
     username: z.string().nonempty(),
     password: z.string().nonempty(),
@@ -41,11 +40,19 @@ export const loginController = expressAsyncHandler(async (req, res) => {
     return;
   }
 
-  res.status(200).json({
-    token: jwt.sign(
-      { id: accountsResult[0].id, role: accountsResult[0].role },
-      process.env.JWT_SECRET!,
-    ),
-    name: accountsResult[0].name,
-  });
+  res
+    .cookie("authorization", jwt.sign({ id: accountsResult[0].id }, process.env.JWT_SECRET!), {
+      httpOnly: true,
+      secure: req.secure,
+      sameSite: "none",
+    })
+    .status(200)
+    .send();
+});
+
+/**
+ * GET /logout: Logouts the user by clearing the cookie.
+ */
+export const logoutController = expressAsyncHandler(async (_, res) => {
+  res.clearCookie("authorization").send();
 });
