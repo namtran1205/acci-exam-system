@@ -5,9 +5,7 @@ import { ref } from "vue";
 const username = ref("");
 const password = ref("");
 
-function hello() {
-  console.log(`${username.value}, ${password.value}`);
-}
+function login() {}
 </script>
 
 <template>
@@ -24,7 +22,7 @@ function hello() {
     <div class="flex w-full flex-col gap-4">
       <button
         class="bg-moss hover:bg-leaf h-16 w-full cursor-pointer rounded-lg font-bold tracking-widest text-white duration-200"
-        @click="hello"
+        @click="login"
       >
         LOGIN
       </button>
