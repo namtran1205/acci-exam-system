@@ -10,4 +10,5 @@ export const schedules = pg.pgTable("schedule", {
   location: pg.text().notNull(),
   name: pg.text().notNull(),
   price: pg.doublePrecision().notNull(),
+  slots: pg.integer().notNull(),
 });
