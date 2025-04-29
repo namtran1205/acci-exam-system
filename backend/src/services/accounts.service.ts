@@ -12,6 +12,6 @@ export async function findAccountByUsername(username: string) {
   return await db
     .select()
     .from(employees)
-    .where(eq(sql`lower${employees.username}`, username.toLowerCase()))
+    .where(eq(sql`lower(${employees.username})`, username.toLowerCase()))
     .limit(1);
 }

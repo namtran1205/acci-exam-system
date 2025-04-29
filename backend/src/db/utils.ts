@@ -1,4 +1,3 @@
-import { sql } from "drizzle-orm";
 import { db } from "./connection";
 
 /**
@@ -8,5 +7,5 @@ import { db } from "./connection";
  * @param name The table name to truncate
  */
 export async function truncateTable(name: string) {
-  await db.execute(sql`truncate table ${name} restart identity cascade`);
+  await db.execute(`truncate table \"${name}\" restart identity cascade`);
 }

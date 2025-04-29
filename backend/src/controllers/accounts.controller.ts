@@ -18,6 +18,7 @@ import { findAccountByUsername } from "../services/accounts.service";
  *   - 200: With the token
  */
 export const loginController = expressAsyncHandler(async (req, res) => {
+  console.log(req.body);
   const schema = z.object({
     username: z.string().nonempty(),
     password: z.string().nonempty(),
@@ -35,7 +36,7 @@ export const loginController = expressAsyncHandler(async (req, res) => {
     return;
   }
 
-  if (bcrypt.compareSync(body.data.password, accountsResult[0].password)) {
+  if (!bcrypt.compareSync(body.data.password, accountsResult[0].password)) {
     res.status(403).json({ message: "Incorrect password" });
     return;
   }
@@ -45,5 +46,6 @@ export const loginController = expressAsyncHandler(async (req, res) => {
       { id: accountsResult[0].id, role: accountsResult[0].role },
       process.env.JWT_SECRET!,
     ),
+    name: accountsResult[0].name,
   });
 });

@@ -1,10 +1,12 @@
 import bcrypt from "bcryptjs";
+import "dotenv/config";
 import { employees } from "../models/employee";
 import db from "./connection";
 import { truncateTable } from "./utils";
 
 async function createEmployees() {
-  await truncateTable("employees");
+  console.log("Setting up employees");
+  await truncateTable("employee");
 
   await db.insert(employees).values([
     {
@@ -34,4 +36,7 @@ async function createEmployees() {
   ]);
 }
 
-createEmployees();
+createEmployees().then(() => {
+  console.log("Finished setting up database");
+  process.exit(0);
+});

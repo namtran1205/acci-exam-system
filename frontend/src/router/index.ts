@@ -6,7 +6,7 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      name: "ACCI | Login",
+      name: "Login",
       component: LoginView,
     },
     {
@@ -35,7 +35,7 @@ const router = createRouter({
 
 // Change the page title on navigation.
 router.beforeEach((to, from, next) => {
-  document.title = to.name?.toString() || "ACCI | Undefined";
+  document.title = to.name?.toString() || "Undefined";
   next();
 });
 
