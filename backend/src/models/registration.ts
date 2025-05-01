@@ -17,6 +17,6 @@ import { customers } from "./customer";
 export const registrations = pg.pgTable("registrations", {
   id: pg.serial().primaryKey(),
   updatedAt: pg.timestamp().notNull().defaultNow(),
-  customerId: pg.serial("customer_id").references(() => customers.id),
-  billId: pg.serial("bill_id").references(() => bills.id),
+  customerId: pg.integer("customer_id").references(() => customers.id),
+  billId: pg.integer("bill_id").references(() => bills.id),
 });

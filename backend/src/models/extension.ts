@@ -15,9 +15,9 @@ import { proofs } from "./proof";
 export const extensions = pg.pgTable("extensions", {
   id: pg.serial().primaryKey(),
   enrollmentId: pg
-    .serial("enrollment_id")
+    .integer("enrollment_id")
     .references(() => enrollments.id)
     .notNull(),
-  proofId: pg.serial("proof_id").references(() => proofs.id),
-  billId: pg.serial("bill_id").references(() => bills.id),
+  proofId: pg.integer("proof_id").references(() => proofs.id),
+  billId: pg.integer("bill_id").references(() => bills.id),
 });

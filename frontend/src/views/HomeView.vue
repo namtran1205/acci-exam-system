@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import IconLogout from "@/components/icons/IconLogout.vue";
+import IconTickChecklist from "@/components/icons/IconTickChecklist.vue";
 import { PUBLIC_API } from "@/services/main";
 import { useProfileStore } from "@/stores/profile";
 import { onMounted, ref } from "vue";
@@ -54,7 +55,15 @@ async function logout() {
     >
 
     <div class="mt-32 flex w-full flex-col gap-6 font-semibold text-white">
-      <div class="flex w-full flex-col gap-2"></div>
+      <div class="flex w-full flex-col gap-2">
+        <RouterLink
+          to="/enrollments"
+          class="bg-moss flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2 text-white"
+        >
+          <IconTickChecklist class="size-5 fill-white" />
+          <span class="font-semibold">Takers Registration</span>
+        </RouterLink>
+      </div>
 
       <button
         class="bg-red flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg px-4 py-2"

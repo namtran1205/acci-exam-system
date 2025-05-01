@@ -20,8 +20,8 @@ export const enrollmentStates = pg.pgEnum("enrollment_states", ["pending", "canc
  */
 export const enrollments = pg.pgTable("enrollments", {
   id: pg.serial().primaryKey(),
-  scheduleId: pg.serial("schedule_id").references(() => schedules.id),
-  participantId: pg.serial("participant_id").references(() => participants.id),
+  scheduleId: pg.integer("schedule_id").references(() => schedules.id),
+  participantId: pg.integer("participant_id").references(() => participants.id),
   number: pg.text(),
   state: enrollmentStates().notNull().default("pending"),
 });
