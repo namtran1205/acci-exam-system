@@ -5,19 +5,14 @@
       <h2 class="mb-8 text-center text-3xl font-bold">New Customer</h2>
 
       <!-- Back Button -->
-      <button
-        class="mb-2 flex cursor-pointer items-center font-bold text-leaf hover:text-lime-900"
-        @click="backPage"
-      >
-        <span class="mr-2"><</span> Back
-      </button>
+      <BackButton />
 
       <!-- Customer Type Section -->
       <div class="mb-6">
         <h3 class="mb-4 font-bold">Customer Type</h3>
 
         <!-- Individual Option -->
-        <div class="mb-2 rounded rounded-xl border border-2 border-green-400 bg-white p-4">
+        <div class="border-live-olive mb-2 rounded-lg border bg-white p-4">
           <label class="flex items-center">
             <input
               type="radio"
@@ -31,7 +26,7 @@
         </div>
 
         <!-- Organization Option -->
-        <div class="bg-almost-white rounded rounded-xl border border-2 border-green-400 p-4">
+        <div class="border-live-olive rounded-lg border bg-black/25 p-4">
           <label class="flex items-center">
             <input
               disabled
@@ -50,7 +45,7 @@
       <div class="flex justify-end">
         <button
           @click="redirectToNextPage"
-          class="flex cursor-pointer items-center rounded bg-lime-600 px-4 py-2 font-bold text-white hover:bg-lime-700"
+          class="bg-moss flex cursor-pointer items-center rounded from-black/25 to-black/25 px-4 py-2 font-bold text-white hover:bg-gradient-to-r"
         >
           Next <span class="ml-4">></span>
         </button>
@@ -60,6 +55,7 @@
 </template>
 
 <script setup lang="ts">
+import BackButton from "@/components/BackButton.vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
@@ -67,10 +63,6 @@ const router = useRouter();
 const customerType = ref<string | null>("customerType");
 
 const redirectToNextPage = () => {
-  router.push({ name: "individual", params: { customerType: customerType.value } });
-};
-
-const backPage = () => {
-  router.go(-1);
+  router.push({ path: "/customers/new/individual" });
 };
 </script>
