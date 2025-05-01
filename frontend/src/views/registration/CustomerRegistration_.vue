@@ -94,7 +94,7 @@
       </div>
     </div>
 
-    <div class="flex justify-between mt-32">
+    <div class="mt-32 flex justify-between">
       <button class="flex h-8 w-8 items-center justify-center rounded-full bg-lime-500 text-white">
         <span class="rtl:rotate-180">←</span>
       </button>
@@ -142,7 +142,7 @@ interface Customer {
 
 const customers = ref<Customer[]>([
   {
-    id: 1, 
+    id: 1,
     name: "Nguyen Phuc An",
     customerType: "Individual",
     phone: "+1 235 513 1023",
@@ -199,5 +199,4 @@ const viewCustomerDetails = (customerId: number) => {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
