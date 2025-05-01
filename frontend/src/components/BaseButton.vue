@@ -1,6 +1,6 @@
 <template>
   <button
-      class="bg-moss hover:bg-leaf flex items-center justify-center cursor-pointer rounded-md bg-lime-500 px-3 py-1 text-white"
+      class="bg-moss hover:bg-leaf flex items-center justify-center cursor-pointer rounded-md bg-lime-500 px-3 py-2 text-white"
       @click="onClick" style="max-height: 30px; min-width: 80px;"
     >
       <template v-if="iconType">
