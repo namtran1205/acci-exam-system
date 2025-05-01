@@ -51,6 +51,16 @@ const router = createRouter({
       component: () => import("../views/registration/EditIndividual.vue"),
       //props: true,
     },
+    {
+      path: "/exam_registration",
+      name: "exam_registration",
+      component: () => import("../views/exam_registration/ExamRegistration.vue"),
+    },
+    {
+      path: "/exam_registration/new_exam_registration",
+      name: "new_exam_registration",
+      component: () => import("../views/exam_registration/NewExamRegistration.vue"),
+    },
   ],
 });
 
