@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import IconExam from "@/components/icons/IconExam.vue";
 import IconLogout from "@/components/icons/IconLogout.vue";
+import IconPeople from "@/components/icons/IconPeople.vue";
 import IconTickChecklist from "@/components/icons/IconTickChecklist.vue";
 import { PUBLIC_API } from "@/services/main";
 import { useProfileStore } from "@/stores/profile";
@@ -57,8 +59,26 @@ async function logout() {
     <div class="mt-32 flex w-full flex-col gap-6 font-semibold text-white">
       <div class="flex w-full flex-col gap-2">
         <RouterLink
+          to="/customers"
+          class="bg-moss flex w-full items-center justify-center gap-2 rounded-lg from-black/25 to-black/25 px-4 py-2 text-white hover:bg-gradient-to-r"
+          v-if="profile.role == 'acceptance'"
+        >
+          <IconPeople class="size-5 fill-white" />
+          <span class="font-semibold">Customers Registration</span>
+        </RouterLink>
+
+        <RouterLink
+          to="/exams"
+          class="bg-moss flex w-full items-center justify-center gap-2 rounded-lg from-black/25 to-black/25 px-4 py-2 text-white hover:bg-gradient-to-r"
+          v-if="profile.role == 'acceptance' || profile.role == 'accounting'"
+        >
+          <IconExam class="size-5 fill-white" />
+          <span class="font-semibold">Exams Registration</span>
+        </RouterLink>
+
+        <RouterLink
           to="/enrollments"
-          class="bg-moss flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2 text-white"
+          class="bg-moss flex w-full items-center justify-center gap-2 rounded-lg from-black/25 to-black/25 px-4 py-2 text-white hover:bg-gradient-to-r"
         >
           <IconTickChecklist class="size-5 fill-white" />
           <span class="font-semibold">Takers Registration</span>
@@ -66,7 +86,7 @@ async function logout() {
       </div>
 
       <button
-        class="bg-red flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg px-4 py-2"
+        class="bg-red flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg from-black/25 to-black/25 px-4 py-2 hover:bg-gradient-to-r"
         @click="logout"
       >
         <IconLogout class="size-5 fill-white" />
