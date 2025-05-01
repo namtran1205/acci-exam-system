@@ -21,6 +21,16 @@ const router = createRouter({
       component: () => import("../views/enrollments/EnrollmentView.vue"),
     },
     {
+      path: "/enrollments/details",
+      name: "Enrollment Details",
+      component: () => import("../views/enrollments/EnrollmentDetailView.vue"),
+    },
+    {
+      path: "/enrollments/extend",
+      name: "Extend an Enrollment",
+      component: () => import("../views/extensions/AddExtensionView.vue"),
+    },
+    {
       path: "/registration",
       name: "registration",
       component: () => import("../views/registration/CustomerRegistration_.vue"),

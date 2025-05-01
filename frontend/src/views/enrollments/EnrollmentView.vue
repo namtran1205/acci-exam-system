@@ -51,14 +51,7 @@ onMounted(async () => {
     <div
       class="bg-almost-white border-live-olive divide-live-olive flex min-h-[19.5rem] w-full flex-col divide-y-[1px] rounded-lg border-[1px]"
     >
-      <EnrollmentCell
-        v-for="enrollment in displayedData"
-        :identifier="enrollment.enrollments.id"
-        :name="enrollment.participants.name"
-        :exam="enrollment.schedule.name"
-        :start-time="enrollment.schedule.startTime"
-        :end-time="enrollment.schedule.endTime"
-      />
+      <EnrollmentCell v-for="enrollment in displayedData" :data="enrollment" />
     </div>
 
     <PaginationBar v-model:page="page" :total-pages="totalPages" />

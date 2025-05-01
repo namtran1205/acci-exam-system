@@ -12,7 +12,7 @@ const model = defineModel<string>();
 
 <template>
   <label class="flex w-full flex-col items-start gap-2">
-    <span class="text-sm font-semibold">{{ label }}</span>
+    <span class="font-semibold">{{ label }}</span>
 
     <div
       :class="{
