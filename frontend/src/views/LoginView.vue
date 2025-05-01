@@ -2,8 +2,7 @@
 import ErrorOverlay from "@/components/ErrorOverlay.vue";
 import TextField from "@/components/TextField.vue";
 import { makeJsonHeader, PUBLIC_API } from "@/services/main";
-import { useProfileStore } from "@/stores/profile";
-import { ref } from "vue";
+import { onMounted, ref, useTemplateRef } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -11,11 +10,24 @@ const router = useRouter();
 const username = ref("");
 const password = ref("");
 
-const profile = useProfileStore();
-
 const loading = ref(false);
 const errorTitle = ref("");
 const errorDescription = ref("");
+
+const loginButtonRef = useTemplateRef("loginButton");
+
+onMounted(() => {
+  // Register a key listener that presses the login button when entered.
+  document.addEventListener("keypress", (e) => {
+    if (e.key == "Enter" || e.key == "Return") {
+      if (errorTitle.value) {
+        errorTitle.value = "";
+      } else {
+        loginButtonRef.value?.click();
+      }
+    }
+  });
+});
 
 async function login() {
   loading.value = true;
@@ -66,6 +78,7 @@ async function login() {
       <button
         class="bg-moss hover:bg-leaf h-16 w-full cursor-pointer rounded-lg font-bold tracking-widest text-white duration-200"
         @click="login"
+        ref="loginButton"
       >
         LOGIN
       </button>
