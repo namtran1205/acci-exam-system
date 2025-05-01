@@ -3,7 +3,7 @@
       <h1 class="mb-8 text-center text-3xl font-bold">New Exam Registration</h1>
       
       <div class="flex items-center justify-between">
-        <BackButton @click="backPage" />
+        <BackButton/>
         <BaseButton
           iconType="Save"
           buttonText="Save"
@@ -67,17 +67,12 @@
                 
               </div>
             </div>
-            <FormField class="mb-4">
-              <div class="flex items-center justify-between w-full">
-                <input
-                  type="text"
-                  placeholder="Search participants..."
-                  v-model="searchQuery"
-                  class="w-full border border-transparent rounded px-1 py-1 focus:outline-none focus:ring-2 focus:ring-transparent focus:border-transparent"
-                />
-                <IconSearch class="absolute right-3 text-gray-500" />
-              </div>
-            </FormField>
+            
+            <SearchBox
+              placeholder="Search participants..."
+              v-model="searchQuery"   
+              class="mb-4"
+            />
             
             <FormField class="mb-4">
               <div
@@ -121,7 +116,7 @@
   import CustomerAvatar from "@/components/CustomerAvatar.vue";
   import BaseButton from "@/components/BaseButton.vue";
   import BackButton from "@/components/BackButton.vue";
-  import IconSearch from "@/components/icons/IconSearch.vue";
+  import SearchBox from "@/components/SearchBox.vue";
 
 
    const router = useRouter();
@@ -235,23 +230,23 @@
     };
 
     const redirectToEditCustomer = () => {
-      router.push({ name: "exam_registration/edit_customer", params: { id: selectedCustomer.value.id } });
+      router.push({ name: "edit_customer", params: { id: selectedCustomer.value.id } });
     };
 
     const redirectChangeCustomer = () => {
-      router.push({ name: "exam_registration/change_customer" });
+      router.push({ name: "change_customer" });
     };
 
     const redirectToNewParticipant = () => {
-      router.push({ name: "exam_registration/new_participant" });
+      router.push({ name: "new_participant" });
     };
 
     const redirectToImportParticipants = () => {
-      router.push({ name: "exam_registration/import_participants" });
+      router.push({ name: "import_participants" });
     };
 
     const redirectToEditParticipant = () => {
-      router.push({ name: "exam_registration/edit_participant" });
+      router.push({ name: "edit_participant" });
     };
 
 </script>

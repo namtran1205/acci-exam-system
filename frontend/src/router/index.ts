@@ -61,6 +61,12 @@ const router = createRouter({
       name: "new_exam_registration",
       component: () => import("../views/exam_registration/NewExamRegistration.vue"),
     },
+
+    { 
+      path: "/exam_registration/change_customer",
+      name: "change_customer",
+      component: () => import("../views/exam_registration/ChangeCustumer.vue"),
+    },
   ],
 });
 
