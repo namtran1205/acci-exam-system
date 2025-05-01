@@ -8,9 +8,9 @@ import { enrollments } from "./enrollment";
 export const results = pg.pgTable("results", {
   id: pg.serial().primaryKey(),
   enrollmentId: pg
-    .serial("enrollment_id")
+    .integer("enrollment_id")
     .notNull()
     .references(() => enrollments.id),
   result: pg.doublePrecision().notNull(),
-  certificateId: pg.serial("certificate_id").references(() => certificates.id),
+  certificateId: pg.integer("certificate_id").references(() => certificates.id),
 });
