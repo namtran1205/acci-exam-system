@@ -21,5 +21,5 @@ export const participants = pg.pgTable("participants", {
   name: pg.text().notNull(),
   dateOfBirth: pg.date().notNull(),
   gender: genders().notNull().default("idiot"),
-  registrationId: pg.serial("registration_id").references(() => registrations.id),
+  registrationId: pg.integer("registration_id").references(() => registrations.id),
 });

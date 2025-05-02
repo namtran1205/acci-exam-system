@@ -1,13 +1,76 @@
+<script setup lang="ts">
+import BackButton from "@/components/BackButton.vue";
+import CustomerAvatar from "@/components/CustomerAvatar.vue";
+import { PUBLIC_API } from "@/services/main";
+import { computed, onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
+const router = useRouter();
+
+interface Customer {
+  id: number;
+  name: string;
+  phone: string;
+  email: string;
+  address: string;
+  role: "individual" | "organization";
+}
+
+const customers = ref<Customer[]>([]);
+const searchQuery = ref("");
+
+const filteredCustomers = computed(() => {
+  if (!searchQuery.value) return customers.value;
+
+  const query = searchQuery.value.toLowerCase();
+  return customers.value.filter(
+    (customer) =>
+      customer.name.toLowerCase().includes(query) || customer.id.toString().includes(query),
+  );
+});
+
+function redirectRegistration() {
+  router.push({ path: "/customers/new" });
+}
+
+function viewCustomerDetails(customerId: number) {
+  const customerdetails = customers.value.find((customer) => customer.id === customerId);
+  if (customerdetails?.role === "individual") {
+    // router.push({
+    //   name: "individual_edit",
+    //   params: {
+    //     id: customerId,
+    //   },
+    //   query: {
+    //     name: customerdetails?.name,
+    //     phone: customerdetails?.phone,
+    //     email: customerdetails?.email,
+    //     type: customerdetails.customerType,
+    //   },
+    // });
+  }
+}
+
+onMounted(async () => {
+  const res = await fetch(`${PUBLIC_API}/customers`, {
+    mode: "cors",
+    credentials: "include",
+  });
+  if (res.status != 200) {
+    return;
+  }
+
+  res.json().then((json) => (customers.value = [...json]));
+});
+</script>
+
 <template>
   <div class="relative flex flex-col">
     <h1 class="mb-8 text-center text-3xl font-bold">Customers Registration</h1>
 
     <div class="flex items-center justify-between">
-      <button class="text-leaf flex items-center font-bold">
-        <span class="mr-3">&lt;</span> Back
-      </button>
+      <BackButton />
       <button
-        class="bg-moss hover:bg-leaf flex cursor-pointer items-center rounded-md bg-lime-500 px-3 py-1 text-white"
+        class="bg-moss hover:bg-leaf flex cursor-pointer items-center rounded-md px-3 py-1 text-white"
         @click="redirectRegistration"
       >
         <span class="mr-1">+</span> New
@@ -50,25 +113,7 @@
           @click="viewCustomerDetails(customer.id)"
         >
           <div class="flex items-center">
-            <div
-              class="mr-3 flex h-8 w-8 items-center justify-center rounded-full"
-              :class="
-                customer.customerType === 'Individual' ? 'bg-transparent' : 'bg-lime-500 text-white'
-              "
-            >
-              <img
-                v-if="customer.customerType === 'Individual'"
-                src="/individual.png"
-                alt="Individual Avatar"
-                class="h-8 w-8 rounded-full"
-              />
-              <img
-                v-else-if="customer.customerType === 'Organization'"
-                src="/organization.png"
-                alt="Organization Avatar"
-                class="h-8 w-8 rounded-full"
-              />
-            </div>
+            <CustomerAvatar :role="customer.role" />
             <div>
               <div class="font-medium">ID {{ customer.id }}</div>
               <div class="text-sm text-gray-600">{{ customer.name }}</div>
@@ -126,77 +171,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref, computed } from "vue";
-import { useRouter } from "vue-router";
-const router = useRouter();
-
-interface Customer {
-  id: number;
-  name: string;
-  phone: string;
-  email: string;
-  customerType: "Individual" | "Organization";
-}
-
-const customers = ref<Customer[]>([
-  {
-    id: 1,
-    name: "Nguyen Phuc An",
-    customerType: "Individual",
-    phone: "+1 235 513 1023",
-    email: "nguyenphucanpth@gmail.com",
-  },
-  {
-    id: 2,
-    name: "Sarah Council",
-    customerType: "Organization",
-    phone: "+1 235 513 1023",
-    email: "haha@gmail.com",
-  },
-  {
-    id: 3,
-    name: "Truong Van Minh",
-    customerType: "Organization",
-    phone: "+1 235 513 1023",
-    email: "tranminhvuongtuan@gmail.com",
-  },
-]);
-
-const searchQuery = ref("");
-
-const filteredCustomers = computed(() => {
-  if (!searchQuery.value) return customers.value;
-
-  const query = searchQuery.value.toLowerCase();
-  return customers.value.filter(
-    (customer) =>
-      customer.name.toLowerCase().includes(query) || customer.id.toString().includes(query),
-  );
-});
-
-const redirectRegistration = () => {
-  router.push({ name: "new_customer" });
-};
-
-const viewCustomerDetails = (customerId: number) => {
-  const customerdetails = customers.value.find((customer) => customer.id === customerId);
-  if (customerdetails?.customerType === "Individual") {
-    router.push({
-      name: "individual_edit",
-      params: {
-        id: customerId,
-      },
-      query: {
-        name: customerdetails?.name,
-        phone: customerdetails?.phone,
-        email: customerdetails?.email,
-        type: customerdetails.customerType,
-      },
-    });
-  }
-};
-</script>
-
-<style scoped></style>
