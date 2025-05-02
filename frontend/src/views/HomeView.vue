@@ -16,6 +16,7 @@ const loading = ref(true);
 async function fetchProfile() {
   const res = await fetch(`${PUBLIC_API}/profiles`, {
     credentials: "include",
+    mode: "cors",
   });
 
   // Go to login.

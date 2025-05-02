@@ -66,15 +66,10 @@ const router = createRouter({
       component: () => import("../views/exams/CustomerSelect.vue"),
     },
     {
-      path: "/extension/TakerRegistration",
-      name: "TakerRegistrations",
-      component: () => import("../views/extension/TakerRegistrations.vue"),
-    },
-    {
-      path: "/extension/TakerRegistration/:id",
-      name: "TakerDetails",
-      component: () => import("../views/extension/TakerDetails.vue"),
-    },
+      path: "/schedule",
+      name: "Schedule",
+      component: () => import("../views/schedule/NewSchedule.vue"),
+    }
   ],
 });
 
