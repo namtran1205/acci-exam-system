@@ -2,7 +2,7 @@
   <h1 class="mb-4 text-center text-3xl font-bold">Individual Details</h1>
   <button
     @click="goBack"
-    class="mb-4 flex cursor-pointer font-bold items-center text-leaf hover:text-lime-900"
+    class="text-leaf mb-4 flex cursor-pointer items-center font-bold hover:text-lime-900"
   >
     <span class="mr-2 text-xl">&lt;</span>
     <span>Back</span>
@@ -43,10 +43,9 @@
     <button
       type="button"
       @click="goBack"
-      class="flex cursor-pointer items-center rounded-md bg-gray-400 px-4 bg-leaf py-2 font-medium text-white hover:bg-gray-500"
-      
+      class="bg-leaf flex cursor-pointer items-center rounded-md bg-gray-400 px-4 py-2 font-medium text-white hover:bg-gray-500"
     >
-    <img src="/register_btn.png" class="mr-2 h-6 w-6" />
+      <img src="/register_btn.png" class="mr-2 h-6 w-6" />
       Save
     </button>
   </div>

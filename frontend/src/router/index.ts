@@ -36,6 +36,16 @@ const router = createRouter({
       component: () => import("../views/registration/EditIndividual.vue"),
       //props: true,
     },
+    {
+      path: "/extension/TakerRegistration",
+      name: "TakerRegistrations",
+      component: () => import("../views/extension/TakerRegistrations.vue"),
+    },
+    {
+      path: "/extension/TakerRegistration/:id",
+      name: "TakerDetails",
+      component: () => import("../views/extension/TakerDetails.vue"),
+    },
   ],
 });
 
