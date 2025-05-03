@@ -43,7 +43,7 @@ export const loginController = expressAsyncHandler(async (req, res) => {
   res
     .cookie("authorization", jwt.sign({ id: accountsResult[0].id }, process.env.JWT_SECRET!), {
       httpOnly: true,
-      secure: req.secure,
+      secure: true,
       sameSite: "none",
     })
     .status(200)

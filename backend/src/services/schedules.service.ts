@@ -1,0 +1,64 @@
+import { asc, eq, sql } from "drizzle-orm";
+import { db } from "../db/connection";
+import { enrollments } from "../models/enrollment";
+import { schedules } from "../models/schedule";
+
+/**
+ * Retrieves a list of schedules.
+ *
+ * @param page the page to retrieve
+ * @returns a list of schedules
+ */
+export async function getSchedules(page: number = 1) {
+  const results = await db
+    .select({
+      id: schedules.id,
+      name: schedules.name,
+      startTime: schedules.startTime,
+      endTime: schedules.endTime,
+      location: schedules.location,
+      price: schedules.price,
+      count: sql`count(distinct ${enrollments.id})`,
+      slots: schedules.slots,
+    })
+    .from(schedules)
+    .leftJoin(enrollments, eq(enrollments.scheduleId, schedules.id))
+    .orderBy(asc(schedules.startTime))
+    .groupBy(
+      schedules.id,
+      schedules.name,
+      schedules.startTime,
+      schedules.endTime,
+      schedules.location,
+      schedules.price,
+      schedules.slots,
+    )
+    .offset((page - 1) * 5)
+    .limit(5);
+
+  const total = await db.$count(schedules);
+
+  return {
+    total: total,
+    totalPages: Math.ceil(total / 5),
+    page,
+    results,
+  };
+}
+
+/**
+ * Creates a schedule.
+ *
+ * @param data the data object containing a schedule
+ * @returns the creation result
+ */
+export async function createSchedule(data: {
+  name: string;
+  startTime: Date;
+  endTime: Date;
+  location: string;
+  price: number;
+  slots: number;
+}) {
+  return await db.insert(schedules).values(data);
+}
