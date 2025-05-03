@@ -6,14 +6,18 @@ import IconClose from "@/components/icons/IconClose.vue";
 import IconIndividual from "@/components/icons/IconIndividual.vue";
 import SearchBox from "@/components/SearchBox.vue";
 import { useNewCustomerSelect } from "@/stores/new-customer-select";
-import { computed, ref } from "vue";
-import { useRouter } from "vue-router";
+import { computed, ref, onMounted } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import IconEdit from "../../components/icons/IconEdit.vue";
 import IconLoad from "../../components/icons/IconLoad.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import { useParticipantSelect } from "@/stores/participant-select";
+import { useRegistrationStore } from "@/stores/working-registration";
+import { PUBLIC_API } from "@/services/main";
 
 const router = useRouter();
+
+const workingRegistration = useRegistrationStore();
 
 const selectedCustomer = useNewCustomerSelect();
 
@@ -24,47 +28,12 @@ const selectCustomer = (c: any) => {
 };
 
 const date = ref(new Date().toISOString().split("T")[0]);
-
+const registration = ref<any>(workingRegistration.registration);
+const registrationId = registration.value.registrations.id;
 const searchQuery = ref("");
-
-interface Participant {
-  id: number;
-  name: string;
-  dateOfBirth: string;
-  gender: string;
-  registrationId: number;
-}
-
-const participants = ref<Participant[]>([
-  {
-    id: 1,
-    name: "Nguyễn Phúc An",
-    dateOfBirth: "2000-01-01",
-    gender: "male",
-    registrationId: 1,
-  },
-  {
-    id: 2,
-    name: "Nguyễn Hà Nam Trân",
-    dateOfBirth: "2000-01-01",
-    gender: "female",
-    registrationId: 1,
-    //examinations: 0,
-  },
-  {
-    id: 3,
-    name: "Trần Đan Huy",
-    dateOfBirth: "2000-01-01",
-    gender: "male",
-    registrationId: 1,
-  },
-]);
+const participants = ref<any[]>(registration.value.participants || []);
 
 const countParticipants = computed(() => participants.value.length);
-
-// const handleRemoveParticipant = (id: number) => {
-//   participants.value = participants.value.filter((participant) => participant.id !== id);
-// };
 
 const filteredParticipants = computed(() => {
   if (!searchQuery.value) return participants.value;
@@ -82,13 +51,14 @@ const redirectToEditCustomer = (customer: any) => {
 
 const participantSelect = useParticipantSelect();
 
-const redirectEditParticipant = (participant: Participant) => {
+const redirectEditParticipant = (participant: any) => {
   participantSelect.participant = participant;
-  router.push({ path: `/exams/new/participant/edit` });
+  router.push({ path: `/customers/edit` });
 };
-function handleRemoveParticipant(id: number) {
-  participants.value = participants.value.filter((participant) => participant.id !== id);
-}
+
+const handleRemoveParticipant = (id: number) => {
+  participants.value = participants.value.filter((p) => p.id !== id);
+};
 
 async function Save() {
   console.log("Save button clicked");
@@ -101,62 +71,55 @@ async function Save() {
 
 <template>
   <div class="relative flex flex-col">
-    <h1 class="mb-8 text-center text-3xl font-bold">New Exam Registration</h1>
+    <h1 class="mb-8 text-center text-3xl font-bold">Edit Exam Registration</h1>
 
     <div class="flex items-center justify-between">
       <BackButton />
       <BaseButton iconType="Save" buttonText="Save" @click="Save" />
     </div>
 
+    <!-- Registration ID-->
+    <FormField class="mb-4" label="Registration ID">
+      <input
+        type="text"
+        placeholder="Registration ID"
+        :value="registrationId"
+        class="w-full rounded-md border border-transparent bg-gray-200 px-4 py-2 focus:border-transparent focus:outline-none"
+        readonly
+      />
+    </FormField>
+
     <!-- Registed to -->
     <FormField class="mb-4" label="Registered to">
       <div
         class="flex min-h-12 w-full items-center justify-between px-4 py-2"
-        v-if="selectedCustomer.customer"
+        v-if="registration.customer"
       >
         <div class="flex items-center">
-          <CustomerAvatar :role="selectedCustomer.customer.role" class="mr-3" />
+          <CustomerAvatar :role="registration.customer.role" class="mr-3" />
           <div>
-            <div class="font-medium">{{ selectedCustomer.customer.name }}</div>
-            <div class="text-sm text-gray-600">{{ selectedCustomer.customer.phone }}</div>
+            <div class="font-medium">{{ registration.customer.name }}</div>
+            <div class="text-sm text-gray-600">{{ registration.customer.phone }}</div>
           </div>
         </div>
-
         <div class="flex items-center gap-2">
           <IconEdit
             class="h-5 w-5 cursor-pointer fill-black transition-transform duration-200 hover:scale-120"
             @click="redirectToEditCustomer(selectedCustomer.customer)"
           />
-
-          <RouterLink to="/exams/new/customer">
-            <IconLoad
-              class="h-5 w-5 cursor-pointer text-gray-600 transition-transform duration-200 hover:scale-120"
-              @click="$router.push({ path: '/exams/new/customer' })"
-            />
-          </RouterLink>
         </div>
-      </div>
-
-      <div
-        class="flex min-h-24 cursor-pointer items-center justify-center px-4 py-2"
-        v-else
-        @click="$router.push({ path: '/exams/new/customer' })"
-      >
-        Click to select
       </div>
     </FormField>
 
     <!-- Date -->
     <FormField class="mb-4" label="Date">
-      <div class="flex h-full w-full items-center justify-between">
-        <input
-          type="text"
-          v-model="date"
-          placeholder="YYYY-MM-DD"
-          class="w-full rounded border border-transparent px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-transparent focus:outline-none"
-          readonly
-        />
-      </div>
+      <input
+        type="text"
+        v-model="date"
+        placeholder="YYYY-MM-DD"
+        class="w-full rounded border border-transparent px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-transparent focus:outline-none"
+        readonly
+      />
     </FormField>
 
     <!-- Participants -->
@@ -193,7 +156,7 @@ async function Save() {
           </div>
           <div class="flex items-center gap-2">
             <IconEdit
-              class="h-5 w-5 cursor-pointer fill-black transition-transform duration-200 hover:scale-120"
+              class="h-5 w-5 cursor-pointer text-gray-600 transition-transform duration-200 hover:scale-120"
               @click="redirectEditParticipant(participant)"
             />
             <IconClose
