@@ -55,6 +55,7 @@ import { useRouter } from "vue-router";
 
 const registrations = ref<any[]>([]);
 const searchQuery = ref("");
+
 const workingRegistration = useRegistrationStore();
 const router = useRouter();
 

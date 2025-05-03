@@ -65,6 +65,21 @@ const router = createRouter({
       name: "Pick a Customer",
       component: () => import("../views/exams/CustomerSelect.vue"),
     },
+    {
+      path: "/schedules",
+      name: "Exam Schedules",
+      component: () => import("../views/schedule/ScheduleListView.vue"),
+    },
+    {
+      path: "/schedules/new",
+      name: "New Schedule",
+      component: () => import("../views/schedule/NewScheduleView.vue"),
+    },
+    {
+      path: "/schedules/edit",
+      name: "Edit Schedule",
+      component: () => import("../views/schedule/EditScheduleView.vue"),
+    },
   ],
 });
 
