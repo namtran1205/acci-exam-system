@@ -61,6 +61,21 @@ const router = createRouter({
       component: () => import("../views/exams/NewExamRegistration.vue"),
     },
     {
+      path: "/exams/edit",
+      name: "Edit Exam Registration",
+      component: () => import("../views/exams/EditExamRegistration.vue"),
+    },
+    {
+      path: "/exams/new/participant",
+      name: "New Participant",
+      component: () => import("../views/exams/NewParticipant.vue"),
+    },
+    {
+      path: "/exams/new/participant/edit",
+      name: "Edit Participant",
+      component: () => import("../views/exams/EditParticipant.vue"),
+    },
+    {
       path: "/exams/new/customer",
       name: "Pick a Customer",
       component: () => import("../views/exams/CustomerSelect.vue"),
