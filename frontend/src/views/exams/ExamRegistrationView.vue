@@ -13,17 +13,11 @@
       </button>
     </div>
 
-    <div
-      class="border-live-olive bg-almost-white my-4 flex flex-row items-center justify-between rounded-lg border px-4 py-2"
-    >
-      <input
-        type="text"
-        placeholder="Search exam registrations..."
-        v-model="searchQuery"
-        class="w-full rounded border border-transparent px-1 py-1 focus:border-transparent focus:ring-2 focus:ring-transparent focus:outline-none"
+    <SearchBox
+      class="my-4"
+      placeholder="Search exam registrations..."
+      v-model="searchQuery"
       />
-      <IconSearch class="right-3 size-5 shrink-0 fill-black" />
-    </div>
 
     <div class="bg-almost-white border-live-olive rounded-lg border">
       <div
@@ -48,6 +42,7 @@ import BackButton from "@/components/BackButton.vue";
 import CustomerAvatar from "@/components/CustomerAvatar.vue";
 import IconPlus from "@/components/icons/IconPlus.vue";
 import IconSearch from "@/components/icons/IconSearch.vue";
+import SearchBox from "@/components/SearchBox.vue";
 import { PUBLIC_API } from "@/services/main";
 import { useRegistrationStore } from "@/stores/working-registration";
 import { computed, onMounted, ref } from "vue";

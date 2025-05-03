@@ -3,7 +3,7 @@
   <div class="w-full">
     <label class="mb-1 block font-semibold text-black">{{ label }}</label>
     <div
-      :class="['border-leaf rounded-md border bg-white px-3 py-1', customClass || '']"
+      :class="['border-leaf rounded-md border bg-white', customClass || '']"
       style="min-height: 40px"
     >
       <slot></slot>

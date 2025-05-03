@@ -6,7 +6,7 @@
   >
     <template v-if="iconType">
       <IconSave v-if="iconType === 'Save'" class="mr-2" />
-      <span v-else-if="iconType === 'New'" class="mr-2">+</span>
+      <IconPlus v-if="iconType === 'New' || iconType === 'Add'" style="fill: white"/>
       <IconImport v-else-if="iconType === 'Import'" class="mr-2" />
     </template>
 
@@ -16,6 +16,7 @@
 
 <script setup lang="ts">
 import IconSave from "./icons/IconSave.vue";
+import IconPlus from "./icons/IconPlus.vue";
 import IconImport from "./icons/IconImport.vue";
 
 const props = defineProps<{

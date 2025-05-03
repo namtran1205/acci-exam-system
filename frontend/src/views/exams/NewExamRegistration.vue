@@ -4,12 +4,14 @@ import CustomerAvatar from "@/components/CustomerAvatar.vue";
 import FormField from "@/components/FormField.vue";
 import IconClose from "@/components/icons/IconClose.vue";
 import IconIndividual from "@/components/icons/IconIndividual.vue";
-import IconSearch from "@/components/icons/IconSearch.vue";
+import SearchBox from "@/components/SearchBox.vue";
 import { useNewCustomerSelect } from "@/stores/new-customer-select";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import IconEdit from "../../components/icons/IconEdit.vue";
 import IconLoad from "../../components/icons/IconLoad.vue";
+import BaseButton from "@/components/BaseButton.vue";
+import { useParticipantSelect } from "@/stores/participant-select";
 
 const router = useRouter();
 
@@ -70,30 +72,38 @@ const searchQuery = ref("");
 interface Participant {
   id: number;
   name: string;
+  dateOfBirth: string;
+  gender: string;
+  registrationId: number;
 }
 
 const participants = ref<Participant[]>([
   {
-    id: 22127002,
+    id: 1,
     name: "Nguyễn Phúc An",
+    dateOfBirth: "2000-01-01",
+    gender: "male",
+    registrationId: 1,
   },
   {
-    id: 22127420,
+    id: 2,
     name: "Nguyễn Hà Nam Trân",
+    dateOfBirth: "2000-01-01",
+    gender: "female",
+    registrationId: 1,
     //examinations: 0,
   },
   {
-    id: 22127163,
+    id: 3,
     name: "Trần Đan Huy",
-    //examinations: 1,
+    dateOfBirth: "2000-01-01",
+    gender: "male",
+    registrationId: 1,
   },
 ]);
 
 const countParticipants = computed(() => participants.value.length);
 
-// const handleRemoveParticipant = (id: number) => {
-//   participants.value = participants.value.filter((participant) => participant.id !== id);
-// };
 
 const filteredParticipants = computed(() => {
   if (!searchQuery.value) return participants.value;
@@ -102,8 +112,18 @@ const filteredParticipants = computed(() => {
   return participants.value.filter(
     (participant) =>
       participant.name.toLowerCase().includes(query) || participant.id.toString().includes(query),
-  );
-});
+  ); 
+}); 
+const participantSelect = useParticipantSelect();
+
+const redirectEditParticipant = (participant: Participant) => {
+  participantSelect.participant = participant;
+  router.push({ path: `/exams/new/participant/edit/${participant.id}` });
+};
+function handleRemoveParticipant(id: number) {
+    participants.value = participants.value.filter((participant) => participant.id !== id);
+  }
+
 </script>
 
 <template>
@@ -117,7 +137,7 @@ const filteredParticipants = computed(() => {
     <!-- Registed to -->
     <FormField class="mb-4" label="Registered to">
       <div
-        class="flex min-h-12 w-full items-center justify-between px-2"
+        class="flex min-h-12 w-full items-center justify-between px-6 py-2"
         v-if="selectedCustomer.customer"
         @click="$router.push({ path: '/exams/new/customer' })"
       >
@@ -153,40 +173,41 @@ const filteredParticipants = computed(() => {
 
     <!-- Date -->
     <FormField class="mb-4" label="Date">
-      <div class="flex h-full w-full items-center justify-between">
+  
         <input
           type="text"
           v-model="date"
           placeholder="YYYY-MM-DD"
-          class="w-full rounded border border-transparent px-1 py-1 focus:border-transparent focus:ring-2 focus:ring-transparent focus:outline-none"
+          class="w-full rounded border border-transparent px-6 py-2 focus:border-transparent focus:ring-2 focus:ring-transparent focus:outline-none"
           readonly
         />
-      </div>
-    </FormField>
+      </FormField>
 
     <!-- Participants -->
     <div>
       <div className="flex justify-between items-center mb-2">
         <p className="font-semibold">Participants ({{ countParticipants }})</p>
-        <div className="flex gap-1"></div>
-      </div>
-      <FormField class="mb-4">
-        <div class="flex w-full items-center justify-between">
-          <input
-            type="text"
-            placeholder="Search participants..."
-            v-model="searchQuery"
-            class="w-full rounded border border-transparent px-1 py-1 focus:border-transparent focus:ring-2 focus:ring-transparent focus:outline-none"
+        <div className="flex gap-1">
+          <BaseButton
+            iconType="New"
+            buttonText="New"
+            @click="$router.push({ path: '/exams/new/participant' })"
           />
-          <IconSearch class="right-3 size-5 shrink-0 fill-black" />
         </div>
-      </FormField>
+      </div>
+      
+      <SearchBox
+        placeholder="Search participants..."
+        v-model="searchQuery"
+        class="mb-2"
+      />
+
 
       <FormField class="mb-4">
         <div
           v-for="participant in filteredParticipants"
           :key="participant.id"
-          class="border-leaf flex cursor-pointer items-center justify-between border-b p-2 last:border-b-0"
+          class="border-leaf flex cursor-pointer items-center justify-between border-b px-6 py-2 last:border-b-0"
         >
           <div class="flex items-center">
             <IconIndividual class="mr-3" />
@@ -199,10 +220,12 @@ const filteredParticipants = computed(() => {
           <div class="flex items-center gap-2">
             <IconEdit
               class="h-5 w-5 cursor-pointer text-gray-600 transition-transform duration-200 hover:scale-120"
-            />
+              @click="redirectEditParticipant(participant)"
+              />
             <IconClose
               class="size-3 cursor-pointer fill-black transition-transform duration-200 hover:scale-120"
-            />
+              @click="handleRemoveParticipant(participant.id)"
+              />
           </div>
         </div>
       </FormField>
