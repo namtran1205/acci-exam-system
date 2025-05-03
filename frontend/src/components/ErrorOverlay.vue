@@ -12,7 +12,7 @@ function close() {
 
 <template>
   <div
-    class="absolute inset-0 z-50 flex size-full items-center justify-center bg-black/25 p-6"
+    class="fixed inset-0 z-50 flex size-full items-center justify-center bg-black/25 p-6"
     v-if="messageModel && errorModel"
     @click.stop="close"
   >

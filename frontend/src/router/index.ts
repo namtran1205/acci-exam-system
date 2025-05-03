@@ -76,10 +76,20 @@ const router = createRouter({
       component: () => import("../views/exams/EditParticipant.vue"),
     },
     {
-      path: "/exams/schedules",
-      name: "Examination Scheduling",
-      component: () => import("../views/exams/ExaminationScheduling.vue"),
-    }
+      path: "/schedules",
+      name: "Exam Schedules",
+      component: () => import("../views/schedule/ScheduleListView.vue"),
+    },
+    {
+      path: "/schedules/new",
+      name: "New Schedule",
+      component: () => import("../views/schedule/NewScheduleView.vue"),
+    },
+    {
+      path: "/schedules/edit",
+      name: "Edit Schedule",
+      component: () => import("../views/schedule/EditScheduleView.vue"),
+    },
   ],
 });
 

@@ -44,3 +44,14 @@ const model = defineModel<string>();
     </div>
   </label>
 </template>
+
+<style lang="css" scoped>
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  display: none;
+}
+</style>
