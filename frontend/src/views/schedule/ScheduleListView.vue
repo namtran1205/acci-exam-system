@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import BackButton from "@/components/BackButton.vue";
 import ExaminationCell from "@/components/ExaminationCell.vue";
+import IconClose from "@/components/icons/IconClose.vue";
 import IconEdit from "@/components/icons/IconEdit.vue";
 import IconPlus from "@/components/icons/IconPlus.vue";
 import PaginationBar from "@/components/PaginationBar.vue";
@@ -31,6 +32,7 @@ interface Schedule {
 const data = ref<Schedule[]>([]);
 const page = ref(1);
 const totalPages = ref(1);
+const editMode = ref(false);
 
 const displayedData = computed(() =>
   data.value.slice((page.value - 1) * 5, (page.value - 1) * 5 + 5),
@@ -54,7 +56,15 @@ onMounted(async () => {
   <div class="flex w-full flex-col gap-3">
     <h2 class="text-center text-2xl font-bold">Examination Scheduling</h2>
 
-    <div class="flex w-full flex-row items-center justify-between">
+    <button
+      @click="editMode = false"
+      v-if="editMode"
+      class="bg-red flex w-fit cursor-pointer items-center justify-center gap-2 rounded-lg from-black/25 to-black/25 px-4 py-2 font-semibold text-white hover:bg-gradient-to-r"
+    >
+      <IconClose class="size-3 fill-white" />
+      Cancel
+    </button>
+    <div class="flex w-full flex-row items-center justify-between" v-else>
       <BackButton />
 
       <div class="flex flex-row items-center gap-2">
@@ -67,7 +77,8 @@ onMounted(async () => {
         </RouterLink>
 
         <button
-          class="bg-leaf flex flex-row items-center gap-2 rounded-lg from-black/25 to-black/25 px-4 py-2 font-semibold text-white hover:bg-gradient-to-r"
+          class="bg-leaf flex cursor-pointer flex-row items-center gap-2 rounded-lg from-black/25 to-black/25 px-4 py-2 font-semibold text-white hover:bg-gradient-to-r"
+          @click="editMode = true"
         >
           <IconEdit class="size-5 fill-white" />
           Edit
@@ -78,7 +89,11 @@ onMounted(async () => {
     <div
       class="bg-almost-white border-live-olive divide-live-olive flex min-h-[19.5rem] w-full flex-col divide-y-[1px] rounded-lg border-[1px]"
     >
-      <ExaminationCell v-for="schedule in displayedData" :schedule="schedule" />
+      <ExaminationCell
+        v-for="schedule in displayedData"
+        :schedule="schedule"
+        :edit-mode="editMode"
+      />
     </div>
 
     <PaginationBar v-model:page="page" :total-pages="totalPages" />

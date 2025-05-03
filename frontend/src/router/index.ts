@@ -75,6 +75,11 @@ const router = createRouter({
       name: "New Schedule",
       component: () => import("../views/schedule/NewScheduleView.vue"),
     },
+    {
+      path: "/schedules/edit",
+      name: "Edit Schedule",
+      component: () => import("../views/schedule/EditScheduleView.vue"),
+    },
   ],
 });
 

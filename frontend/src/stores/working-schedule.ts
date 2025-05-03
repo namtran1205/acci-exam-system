@@ -29,3 +29,10 @@ export const useWorkingSchedulesStore = defineStore("working-schedules", {
     },
   },
 });
+
+/**
+ * Represents the state that holds the schedule currently being selected for editing.
+ */
+export const useEditingScheduleStore = defineStore("editing-schedule", {
+  state: () => ({ schedule: undefined as Schedule | undefined }),
+});

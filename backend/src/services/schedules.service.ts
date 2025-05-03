@@ -62,3 +62,31 @@ export async function createSchedule(data: {
 }) {
   return await db.insert(schedules).values(data);
 }
+
+/**
+ * Edits a schedule.
+ *
+ * @param data the data object containing a whole schedule
+ * @returns the editing result
+ */
+export async function editSchedule(data: {
+  id: number;
+  name: string;
+  startTime: Date;
+  endTime: Date;
+  location: string;
+  price: number;
+  slots: number;
+}) {
+  return await db
+    .update(schedules)
+    .set({
+      name: data.name,
+      startTime: data.startTime,
+      endTime: data.endTime,
+      location: data.location,
+      price: data.price,
+      slots: data.slots,
+    })
+    .where(eq(schedules.id, data.id));
+}
