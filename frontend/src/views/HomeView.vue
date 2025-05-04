@@ -14,12 +14,6 @@ const router = useRouter();
 const loading = ref(true);
 
 async function fetchProfile() {
-  const res = await fetch(`${PUBLIC_API}/profiles`, {
-    credentials: "include",
-    mode: "cors",
-  });
-  // Go to login.
-  if (res.status != 200) {
   await profile.retrieveData();
   if (!profile.name) {
     router.replace({ path: "/login" });

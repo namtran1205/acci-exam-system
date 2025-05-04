@@ -6,6 +6,7 @@ import { profilesRouter } from "./profiles.router";
 import { registrationsRouter } from "./registrations.router";
 import { schedulesRouter } from "./schedules.router";
 import { certificatesRouter } from "./certificates.router";
+import { extensionRouter } from "./extension.router";
 
 const router = express.Router();
 
@@ -16,5 +17,6 @@ router.use("/customers", customersRouter);
 router.use("/registrations", registrationsRouter);
 router.use("/schedules", schedulesRouter);
 router.use("/certificates", certificatesRouter);
+router.use("/extension", extensionRouter);
 
 export { router as mainRouter };
