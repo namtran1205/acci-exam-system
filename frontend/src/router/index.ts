@@ -102,6 +102,17 @@ const router = createRouter({
       component: () => import("../views/schedule/EditScheduleView.vue"),
     },
     {
+      path: "/certificates",
+      name: "Certificates",
+      component: () => import("../views/certificates/CertificateList.vue"),
+    },
+    {
+      path: "/certificates/:id",
+      name: "certificate-details",
+      component: () => import("../views/certificates/CertificateDetails.vue"),
+      props: true,
+    },
+    {
       path: "/:pathMatch(.*)*",
       name: "Not found",
       component: NotFoundView,
