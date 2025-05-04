@@ -28,6 +28,7 @@ onMounted(async () => {
   // Fetch the enrollments data.
   const firstPage = await fetchEnrollments();
   data.value = [...firstPage.results];
+  console.log(data.value);
 
   let current = firstPage.page;
   totalPages.value = firstPage.totalPages;

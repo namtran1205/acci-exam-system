@@ -1,5 +1,6 @@
 import HomeView from "@/views/HomeView.vue";
 import LoginView from "@/views/LoginView.vue";
+import NotFoundView from "@/views/NotFoundView.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
@@ -29,6 +30,11 @@ const router = createRouter({
       path: "/enrollments/extend",
       name: "Extend an Enrollment",
       component: () => import("../views/extensions/AddExtensionView.vue"),
+    },
+    {
+      path: "/enrollments/certificate",
+      name: "Add Certificate",
+      component: () => import("../views/enrollments/EnrollmentCertificateView.vue"),
     },
     {
       path: "/customers",
@@ -94,6 +100,11 @@ const router = createRouter({
       path: "/schedules/edit",
       name: "Edit Schedule",
       component: () => import("../views/schedule/EditScheduleView.vue"),
+    },
+    {
+      path: "/:pathMatch(.*)*",
+      name: "Not found",
+      component: NotFoundView,
     },
   ],
 });
