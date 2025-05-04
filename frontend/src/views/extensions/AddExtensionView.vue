@@ -3,11 +3,31 @@ import BackButton from "@/components/BackButton.vue";
 import IconCheckmark from "@/components/icons/IconCheckmark.vue";
 import RadioGroup from "@/components/RadioGroup.vue";
 import TextField from "@/components/TextField.vue";
-import { ref } from "vue";
+import IconLoad from "@/components/icons/IconLoad.vue";
+import IconSchedule from "@/components/icons/IconSchedule.vue";
+import FormField from "@/components/FormField.vue";
+import { ref, computed } from "vue";
+import { useEditingScheduleStore, useWorkingSchedulesStore } from "@/stores/working-schedule";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const extensionType = ref("regular");
 const proofType = ref("");
 const proofInformation = ref("");
+// store đang giữ schedule được chọn
+const schedule = useEditingScheduleStore();
+
+const redirectToSchedulesSelect = () => {
+  router.push("/schedules?mode=single");
+};
+
+async function Save() {
+  console.log("Save button clicked");
+  // Add your save logic here
+
+  // Redirect to the desired page after saving
+  router.push("/enrollments/details");
+}
 </script>
 
 <template>
@@ -25,12 +45,47 @@ const proofInformation = ref("");
 
     <div class="flex w-full flex-col gap-2">
       <span class="font-semibold">Postponing to</span>
-
-      <button
-        class="border-live-olive bg-almost-white flex h-20 flex-row items-center justify-center rounded-lg border-[1px] from-black/10 to-black/10 text-lg font-semibold hover:bg-gradient-to-r"
-      >
-        Select a Schedule
-      </button>
+      <FormField>
+        <div v-if="schedule.schedule" class="w-full space-y-1">
+          <div class="border-b px-4 py-2 last:border-b-0">
+            <div class="flex justify-between">
+              <div class="flex">
+                <div class="flex items-center">
+                  <IconSchedule class="mr-3 self-center" />
+                </div>
+                <div>
+                  <h3 class="font-bold">{{ schedule.schedule.name }}</h3>
+                  <p class="text-sm">
+                    {{ new Date(schedule.schedule.startTime).toLocaleDateString() }}
+                  </p>
+                  <p class="text-sm">
+                    {{ new Date(schedule.schedule.startTime).toLocaleTimeString() }} -
+                    {{ new Date(schedule.schedule.endTime).toLocaleTimeString() }}
+                  </p>
+                  <p class="text-sm text-gray-500">{{ schedule.schedule.location }}</p>
+                </div>
+              </div>
+              <div class="flex items-center">
+                <button class="text-gray-500 hover:text-gray-700">
+                  <IconLoad
+                    class="h-5 w-5 cursor-pointer text-gray-600 transition-transform duration-200 hover:scale-120"
+                    style="fill: black"
+                    @click="redirectToSchedulesSelect"
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-else>
+          <button
+            class="bg-almost-white flex h-20 w-full flex-row items-center justify-center rounded-lg border-transparent from-black/10 to-black/10 px-4 py-2 text-lg font-semibold hover:bg-gradient-to-r"
+            @click="redirectToSchedulesSelect"
+          >
+            Select a Schedule
+          </button>
+        </div>
+      </FormField>
     </div>
 
     <TextField
@@ -50,6 +105,7 @@ const proofInformation = ref("");
 
     <button
       class="bg-moss flex w-fit items-center gap-2 self-end rounded-lg px-4 py-2 font-semibold text-white"
+      @click="Save"
     >
       <IconCheckmark class="size-5 fill-white" />
       Accept
