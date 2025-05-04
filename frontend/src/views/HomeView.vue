@@ -84,6 +84,13 @@ async function logout() {
           <IconTickChecklist class="size-5 fill-white" />
           <span class="font-semibold">Takers Registration</span>
         </RouterLink>
+        <RouterLink
+          to="/certificates"
+          class="bg-moss flex w-full items-center justify-center gap-2 rounded-lg from-black/25 to-black/25 px-4 py-2 text-white hover:bg-gradient-to-r"
+        >
+          <IconTickChecklist class="size-5 fill-white" />
+          <span class="font-semibold">Certificate Lookup</span>
+        </RouterLink>
       </div>
 
       <button
