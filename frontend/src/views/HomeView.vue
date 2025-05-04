@@ -18,16 +18,13 @@ async function fetchProfile() {
     credentials: "include",
     mode: "cors",
   });
-
   // Go to login.
   if (res.status != 200) {
+  await profile.retrieveData();
+  if (!profile.name) {
     router.replace({ path: "/login" });
     return;
   }
-
-  const data = await res.json();
-  profile.name = data.name;
-  profile.role = data.role;
 }
 
 onMounted(async () => {
@@ -37,13 +34,13 @@ onMounted(async () => {
 });
 
 async function logout() {
-  console.log(
-    await fetch(`${PUBLIC_API}/logout`, {
-      method: "GET",
-      mode: "cors",
-      credentials: "include",
-    }),
-  );
+  await fetch(`${PUBLIC_API}/logout`, {
+    method: "GET",
+    mode: "cors",
+    credentials: "include",
+  });
+  profile.name = undefined;
+  profile.role = undefined;
   router.replace({ path: "/login" });
 }
 </script>

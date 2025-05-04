@@ -57,7 +57,13 @@ function select(customer: Customer) {
               <div class="text-sm text-gray-600">{{ customer.name }}</div>
             </div>
           </div>
-          <div class="font-semibold text-green-700">
+          <div
+            :class="
+              customer.id === customerSelect.customer?.id
+                ? 'text-moss font-semibold'
+                : 'font-semibold text-gray-500'
+            "
+          >
             {{ customer.id === customerSelect.customer?.id ? "Selected" : "Select" }}
           </div>
         </div>

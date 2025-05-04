@@ -27,7 +27,7 @@ const proofInformation = ref("");
       <span class="font-semibold">Postponing to</span>
 
       <button
-        class="border-live-olive bg-almost-white flex h-20 flex-row items-center justify-center rounded-lg border-[1px] text-lg font-semibold"
+        class="border-live-olive bg-almost-white flex h-20 flex-row items-center justify-center rounded-lg border-[1px] from-black/10 to-black/10 text-lg font-semibold hover:bg-gradient-to-r"
       >
         Select a Schedule
       </button>

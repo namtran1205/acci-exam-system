@@ -1,5 +1,6 @@
 import HomeView from "@/views/HomeView.vue";
 import LoginView from "@/views/LoginView.vue";
+import NotFoundView from "@/views/NotFoundView.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
@@ -29,6 +30,11 @@ const router = createRouter({
       path: "/enrollments/extend",
       name: "Extend an Enrollment",
       component: () => import("../views/extensions/AddExtensionView.vue"),
+    },
+    {
+      path: "/enrollments/certificate",
+      name: "Add Certificate",
+      component: () => import("../views/enrollments/EnrollmentCertificateView.vue"),
     },
     {
       path: "/customers",
@@ -61,6 +67,21 @@ const router = createRouter({
       component: () => import("../views/exams/NewExamRegistration.vue"),
     },
     {
+      path: "/exams/edit",
+      name: "Edit Exam Registration",
+      component: () => import("../views/exams/EditExamRegistration.vue"),
+    },
+    {
+      path: "/exams/new/participant",
+      name: "New Participant",
+      component: () => import("../views/exams/NewParticipant.vue"),
+    },
+    {
+      path: "/exams/new/participant/edit",
+      name: "Edit Participant",
+      component: () => import("../views/exams/EditParticipant.vue"),
+    },
+    {
       path: "/exams/new/customer",
       name: "Pick a Customer",
       component: () => import("../views/exams/CustomerSelect.vue"),
@@ -90,7 +111,11 @@ const router = createRouter({
       name: "certificate-details",
       component: () => import("../views/certificates/CertificateDetails.vue"),
       props: true,
-    }
+    },
+      path: "/:pathMatch(.*)*",
+      name: "Not found",
+      component: NotFoundView,
+    },
   ],
 });
 

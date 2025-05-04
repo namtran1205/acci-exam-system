@@ -1,10 +1,12 @@
 import bcrypt from "bcryptjs";
 import "dotenv/config";
+import { certificates } from "../models/certificate";
 import { customers } from "../models/customer";
 import { employees } from "../models/employee";
 import { enrollments } from "../models/enrollment";
 import { participants } from "../models/participant";
 import { registrations } from "../models/registration";
+import { results } from "../models/result";
 import { schedules } from "../models/schedule";
 import db from "./connection";
 import { truncateTable } from "./utils";
@@ -406,10 +408,72 @@ async function createEnrollments() {
   ]);
 }
 
-Promise.all([createEmployees(), createCustomers(), createSchedules()])
+async function createCertificates() {
+  console.log("Setting up certificates");
+  await truncateTable("certificates");
+
+  await db.insert(certificates).values([
+    {
+      name: "Beginner Chemist",
+      received: false,
+    },
+    {
+      name: "Intermediate Physician",
+      received: false,
+    },
+    {
+      name: "Advanced Mathematician",
+      received: true,
+    },
+    {
+      name: "Advanced Physician",
+      received: false,
+    },
+    {
+      name: "Beginner Athlete",
+      received: true,
+    },
+  ]);
+}
+
+async function createResults() {
+  console.log("Setting up results");
+  await truncateTable("results");
+
+  await db.insert(results).values([
+    {
+      enrollmentId: 1,
+      result: 8.0,
+      certificateId: 1,
+    },
+    {
+      enrollmentId: 2,
+      result: 9.0,
+      certificateId: 2,
+    },
+    {
+      enrollmentId: 3,
+      result: 6.5,
+      certificateId: 3,
+    },
+    {
+      enrollmentId: 4,
+      result: 10.0,
+      certificateId: 4,
+    },
+    {
+      enrollmentId: 5,
+      result: 5.0,
+      certificateId: 5,
+    },
+  ]);
+}
+
+Promise.all([createEmployees(), createCustomers(), createSchedules(), createCertificates()])
   .then(() => Promise.all([createRegistrations()]))
   .then(() => Promise.all([createParticipants()]))
   .then(() => Promise.all([createEnrollments()]))
+  .then(() => Promise.all([createResults()]))
   .then(() => {
     console.log("Finished setting up database");
     process.exit(0);
