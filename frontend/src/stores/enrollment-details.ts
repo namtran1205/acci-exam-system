@@ -4,6 +4,11 @@ interface EnrollmentDetails {
   id: number;
   name: string;
   number: string;
+  result?: number;
+  certificate?: {
+    name: string;
+    received: boolean;
+  };
   customer: {
     name: string;
     phone: string;

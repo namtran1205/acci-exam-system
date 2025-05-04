@@ -27,6 +27,13 @@ interface EnrollmentResult {
     phone: string;
     role: string;
   };
+  results?: {
+    result: number;
+  };
+  certificates?: {
+    name: string;
+    received: boolean;
+  };
 }
 
 const props = defineProps<{
@@ -52,6 +59,8 @@ function navigateToDetails() {
     exam: {
       ...props.data.schedule,
     },
+    result: props.data.results?.result,
+    certificate: props.data.certificates,
     extensions: [],
   };
   router.push({ path: "/enrollments/details" });
