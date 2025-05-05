@@ -11,11 +11,14 @@ import { useRouter } from "vue-router";
 import IconEdit from "../../components/icons/IconEdit.vue";
 import IconLoad from "../../components/icons/IconLoad.vue";
 import BaseButton from "@/components/BaseButton.vue";
-import { useParticipantSelect } from "@/stores/participant-select";
+import { useParticipantSelect, useParticipantListSelect } from "@/stores/participant-select";
+import { PUBLIC_API } from "@/services/main";
 
 const router = useRouter();
 
 const selectedCustomer = useNewCustomerSelect();
+
+const participantListSelect = useParticipantListSelect();
 
 const showDropdown = ref(false);
 
@@ -60,7 +63,7 @@ const participants = ref<Participant[]>([
   },
 ]);
 
-const countParticipants = computed(() => participants.value.length);
+const countParticipants = computed(() => participantListSelect.participants.length);
 
 // const handleRemoveParticipant = (id: number) => {
 //   participants.value = participants.value.filter((participant) => participant.id !== id);
@@ -87,7 +90,30 @@ const redirectEditParticipant = (participant: Participant) => {
   router.push({ path: `/exams/new/participant/edit` });
 };
 function handleRemoveParticipant(id: number) {
-  participants.value = participants.value.filter((participant) => participant.id !== id);
+  participantListSelect.participants = participantListSelect.participants.filter(
+    (participant) => participant.id !== id,
+  );
+}
+
+async function saveRegistration(customerId: number, billId?: number) {
+  try {
+    const response = await fetch(`${PUBLIC_API}/registrations/save`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ customerId, ...(billId ? { billId } : {}) }), // Chỉ gửi billId nếu có
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to save registration");
+    }
+
+    const result = await response.json();
+    console.log("Registration saved:", result);
+  } catch (error) {
+    console.error("Error saving registration:", error);
+  }
+
+  router.push({ path: "/exams" });
 }
 
 async function Save() {
@@ -105,7 +131,11 @@ async function Save() {
 
     <div class="flex items-center justify-between">
       <BackButton />
-      <BaseButton iconType="Save" buttonText="Save" @click="Save" />
+      <BaseButton
+        iconType="Save"
+        buttonText="Save"
+        @click="() => saveRegistration(selectedCustomer.customer!.id)"
+      />
     </div>
 
     <!-- Registed to -->
@@ -176,7 +206,7 @@ async function Save() {
 
       <FormField class="mb-4">
         <div
-          v-for="participant in filteredParticipants"
+          v-for="participant in participantListSelect.participants"
           :key="participant.id"
           class="border-leaf flex cursor-pointer items-center justify-between border-b px-4 py-2 last:border-b-0"
         >
