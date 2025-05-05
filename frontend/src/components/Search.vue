@@ -6,7 +6,7 @@
         :placeholder="placeholder"
         class="bg-almost-white border-leaf w-full rounded-md border px-3 py-2 pr-10"
         :value="modelValue"
-        @input="$emit('update:modelValue', $event.target.value)"
+        @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
       />
       <button class="absolute top-2 right-2 text-gray-500">
         <svg
