@@ -9,6 +9,7 @@ import BaseButton from "@/components/BaseButton.vue";
 import IconSchedule from "@/components/icons/IconSchedule.vue";
 import IconClose from "@/components/icons/IconClose.vue";
 import { PUBLIC_API } from "@/services/main";
+import { useParticipantListSelect } from "@/stores/participant-select";
 
 const router = useRouter();
 
@@ -18,6 +19,8 @@ const participant = ref({
   gender: "",
   registrationId: -1,
 });
+
+const participantListSelect = useParticipantListSelect();
 
 interface Enrollment {
   id: number;
@@ -38,6 +41,20 @@ const redirectToSchedulesSelect = () => {
 async function Save() {
   console.log("Save button clicked");
   // Add your save logic here
+
+  // Tạo participant mới với ID duy nhất
+  const newParticipant = {
+    id: Date.now(), // Tạo ID tạm thời (nếu backend tạo, ta lấy từ response)
+    name: participant.value.name,
+    dateOfBirth: participant.value.dateOfBirth,
+    gender: participant.value.gender,
+    registrationId: participant.value.registrationId,
+  };
+
+  // Lưu vào store
+  participantListSelect.participants.push(newParticipant);
+
+  console.log("Participant saved:", newParticipant);
 
   // Redirect to the desired page after saving
   router.push({ name: "New Exam Registration" });

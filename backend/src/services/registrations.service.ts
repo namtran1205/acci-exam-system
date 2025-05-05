@@ -10,3 +10,7 @@ export async function getAllRegistrations() {
     .innerJoin(customers, eq(registrations.customerId, customers.id))
     .orderBy(asc(registrations.id));
 }
+
+export async function saveRegistration(data: { customerId: number; billId?: number }) {
+  return db.insert(registrations).values(data).returning();
+}
