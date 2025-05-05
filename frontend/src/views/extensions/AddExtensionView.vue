@@ -8,7 +8,9 @@ import IconSchedule from "@/components/icons/IconSchedule.vue";
 import FormField from "@/components/FormField.vue";
 import { ref, computed } from "vue";
 import { useEditingScheduleStore, useWorkingSchedulesStore } from "@/stores/working-schedule";
+import { useEnrollmentDetailsStore } from "@/stores/enrollment-details";
 import { useRouter } from "vue-router";
+import { PUBLIC_API } from "@/services/main";
 
 const router = useRouter();
 const extensionType = ref("regular");
@@ -16,17 +18,56 @@ const proofType = ref("");
 const proofInformation = ref("");
 // store đang giữ schedule được chọn
 const schedule = useEditingScheduleStore();
+const enrollmentStore = useEnrollmentDetailsStore();
+const currentEnrollment = computed(() => enrollmentStore.enrollment);
 
 const redirectToSchedulesSelect = () => {
   router.push("/schedules?mode=single");
 };
 
+// Handle saving the extension via API 
 async function Save() {
   console.log("Save button clicked");
-  // Add your save logic here
 
-  // Redirect to the desired page after saving
-  router.push("/enrollments/details");
+  if (!schedule.schedule?.id || !currentEnrollment.value?.id) {
+    console.error("Schedule ID or Enrollment ID is missing.");
+    return;
+  }
+
+  const payload: any = {
+    enrollmentId: currentEnrollment.value.id, 
+    scheduleId: schedule.schedule?.id,
+  };
+
+  if (extensionType.value === "special") {
+    if (!proofType.value || !proofInformation.value) {
+      console.error("Proof Type and Proof Information are required for special extension.");
+      return;
+    }
+    payload["proofType"] = proofType.value;
+    payload["proofInfo"] = proofInformation.value;
+  }
+
+  try {
+    const response = await fetch(`${PUBLIC_API}/extension`, { 
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      }, 
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Failed to save extension:", errorData);
+      return;
+    }
+    const result = await response.json();
+    console.log("Extension saved successfully:", result);
+    router.push("/enrollments/details");
+  } catch (error) {
+    console.error("An error occurred while saving the extension:", error);
+  }
 }
 </script>
 
@@ -104,7 +145,7 @@ async function Save() {
     />
 
     <button
-      class="bg-moss flex w-fit items-center gap-2 self-end rounded-lg px-4 py-2 font-semibold text-white"
+      class="bg-moss flex w-fit cursor-pointer items-center gap-2 self-end rounded-lg px-4 py-2 font-semibold text-white"
       @click="Save"
     >
       <IconCheckmark class="size-5 fill-white" />
