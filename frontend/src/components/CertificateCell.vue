@@ -8,25 +8,36 @@
 
     <div class="flex w-full flex-col items-start text-left" @click="navigateToDetails">
       <span class="font-semibold">ID {{ certificate.certificate_id }}</span>
-      <span class="text-sm font-semibold text-black/50">For: {{ certificate.participant_name }}</span>
+      <span class="text-sm font-semibold text-black/50"
+        >For: {{ certificate.participant_name }}</span
+      >
       <span class="text-sm font-semibold text-black/50">Type: {{ certificate.exam_name }} </span>
       <span :class="{ 'text-red-500': !isReceived, 'text-green-500': isReceived }">
-        {{ isReceived ? 'Received' : 'Not received' }}
+        {{ isReceived ? "Received" : "Not received" }}
       </span>
     </div>
 
-    <div class="flex items-center justify-end shrink-0 ml-auto">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
-        <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 5.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06.02z" clip-rule="evenodd" />
+    <div class="ml-auto flex shrink-0 items-center justify-end">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+        class="size-5"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 5.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06.02z"
+          clip-rule="evenodd"
+        />
       </svg>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import IconExam from "./icons/IconExam.vue";
-import { defineProps, computed } from "vue";
+import { computed, defineProps } from "vue";
 import { useRouter } from "vue-router";
+import IconExam from "./icons/IconExam.vue";
 
 const router = useRouter();
 
@@ -44,7 +55,7 @@ const isReceived = computed(() => props.certificate.certificate_status);
 
 function navigateToDetails() {
   router.push({
-    name: 'certificate-details',
+    name: "certificate-details",
     params: {
       id: props.certificate.certificate_id,
     },
@@ -52,7 +63,7 @@ function navigateToDetails() {
       participantName: props.certificate.participant_name,
       examName: props.certificate.exam_name,
       examAddress: props.certificate.exam_address,
-      certificateStatus: props.certificate.certificate_status, // Truyền boolean
+      certificateStatus: props.certificate.certificate_status.toString(), // Truyền boolean
     },
   });
 }
