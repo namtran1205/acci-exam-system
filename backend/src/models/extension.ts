@@ -20,4 +20,5 @@ export const extensions = pg.pgTable("extensions", {
     .notNull(),
   proofId: pg.integer("proof_id").references(() => proofs.id),
   billId: pg.integer("bill_id").references(() => bills.id),
+  createdAt: pg.timestamp().defaultNow(),
 });

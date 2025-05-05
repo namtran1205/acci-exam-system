@@ -7,6 +7,9 @@ interface Registration {
     phone: string;
     role: "individual" | "organization";
   };
+  registrations: {
+    id: number;
+  };
   participants: {
     id: number;
     name: string;

@@ -1,24 +1,22 @@
 <script setup lang="ts">
 import BackButton from "@/components/BackButton.vue";
+import BaseButton from "@/components/BaseButton.vue";
 import CustomerAvatar from "@/components/CustomerAvatar.vue";
 import FormField from "@/components/FormField.vue";
 import IconClose from "@/components/icons/IconClose.vue";
 import IconIndividual from "@/components/icons/IconIndividual.vue";
 import SearchBox from "@/components/SearchBox.vue";
+import { PUBLIC_API } from "@/services/main";
 import { useNewCustomerSelect } from "@/stores/new-customer-select";
-import { computed, ref, onMounted } from "vue";
-import { useRouter, useRoute } from "vue-router";
-import IconEdit from "../../components/icons/IconEdit.vue";
-import IconLoad from "../../components/icons/IconLoad.vue";
-import BaseButton from "@/components/BaseButton.vue";
 import { useParticipantSelect } from "@/stores/participant-select";
 import { useRegistrationStore } from "@/stores/working-registration";
-import { PUBLIC_API } from "@/services/main";
+import { computed, onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
+import IconEdit from "../../components/icons/IconEdit.vue";
 
 const router = useRouter();
 
 const workingRegistration = useRegistrationStore();
-
 const selectedCustomer = useNewCustomerSelect();
 
 const showDropdown = ref(false);
@@ -29,9 +27,9 @@ const selectCustomer = (c: any) => {
 
 const date = ref(new Date().toISOString().split("T")[0]);
 const registration = ref<any>(workingRegistration.registration);
-const registrationId = registration.value.registrations.id;
+const registrationId = computed(() => registration.value?.registrations.id);
 const searchQuery = ref("");
-const participants = ref<any[]>(registration.value.participants || []);
+const participants = ref<any[]>(registration.value?.participants || []);
 
 const countParticipants = computed(() => participants.value.length);
 
@@ -67,6 +65,25 @@ async function Save() {
   // Redirect to the desired page after saving
   router.push({ path: "/exams" });
 }
+
+onMounted(async () => {
+  if (!workingRegistration.registration) {
+    router.replace({ path: "/exams" });
+    return;
+  }
+
+  const res = await fetch(
+    `${PUBLIC_API}/participants?id=${workingRegistration.registration?.registrations.id}`,
+    {
+      mode: "cors",
+      credentials: "include",
+    },
+  );
+
+  if (res.status == 200) {
+    participants.value = [...(await res.json())];
+  }
+});
 </script>
 
 <template>
@@ -93,7 +110,7 @@ async function Save() {
     <FormField class="mb-4" label="Registered to">
       <div
         class="flex min-h-12 w-full items-center justify-between px-4 py-2"
-        v-if="registration.customer"
+        v-if="registration?.customer"
       >
         <div class="flex items-center">
           <CustomerAvatar :role="registration.customer.role" class="mr-3" />

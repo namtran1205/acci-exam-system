@@ -23,6 +23,8 @@ const loading = ref(false);
 const errorTitle = ref("");
 const errorMessage = ref("");
 
+const extensionsList = ref<{ id: number; createdAt: string; proofType?: string }[]>([]);
+
 const examScore = ref("");
 const currentCertificate = useWorkingCertificateStore();
 
@@ -37,6 +39,17 @@ onMounted(async () => {
   examScore.value = workingEnrollment.enrollment?.result?.toString() || "";
   currentCertificate.certificate =
     currentCertificate.certificate || workingEnrollment.enrollment?.certificate?.name;
+
+  if (profile.role == "acceptance") {
+    const res = await fetch(`${PUBLIC_API}/extensions?id=${workingEnrollment.enrollment?.id}`, {
+      credentials: "include",
+      mode: "cors",
+    });
+
+    if (res.status == 200) {
+      extensionsList.value = [...(await res.json())];
+    }
+  }
 });
 
 async function sendScores() {
@@ -128,10 +141,47 @@ async function sendScores() {
     </template>
 
     <template v-else-if="profile.role == 'acceptance'">
+      <div class="flex w-full flex-col gap-2">
+        <span class="font-semibold">Extensions</span>
+
+        <div
+          v-if="extensionsList.length == 0"
+          class="bg-almost-white border-live-olive flex min-h-24 w-full items-center justify-center rounded-lg border"
+        >
+          No extensions
+        </div>
+
+        <div
+          class="bg-almost-white border-live-olive divide-live-olive flex w-full flex-col divide-y rounded-lg border"
+          v-else
+        >
+          <div
+            class="flex min-h-12 w-full flex-row items-center gap-2 px-4 py-2"
+            v-for="extension in extensionsList"
+          >
+            <div
+              class="bg-live-olive flex size-8 shrink-0 items-center justify-center rounded-full"
+            >
+              <IconHistory class="size-4 fill-black" />
+            </div>
+
+            <div class="flex w-full flex-col">
+              <span>{{
+                new Date(extension.createdAt).toLocaleDateString([], { dateStyle: "short" })
+              }}</span>
+              <span v-if="extension.proofType" class="text-moss text-sm font-semibold"
+                >Exemption</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="flex w-full flex-row items-center justify-end gap-2">
         <button
-          class="bg-moss flex cursor-pointer flex-row items-center gap-2 rounded-lg from-black/25 to-black/25 px-4 py-2 font-semibold text-white hover:bg-gradient-to-r"
+          class="bg-moss flex cursor-pointer flex-row items-center gap-2 rounded-lg from-black/25 to-black/25 px-4 py-2 font-semibold text-white hover:bg-gradient-to-r disabled:cursor-not-allowed disabled:opacity-50"
           @click="$router.push({ path: '/enrollments/extend' })"
+          :disabled="extensionsList.length >= 2"
         >
           <IconHistory class="size-5 fill-white" />
           Add Extensions

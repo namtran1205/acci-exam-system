@@ -101,20 +101,18 @@ export async function putResultsOnEnrollment(data: {
   });
 }
 
-
 /**
  * @Update the enrollents based on the new schedule and make it in pending status.
  * @param enrollmentId The enrollment ID to update
  * @param scheduleId The new schedule ID to set
  * */
 
-export async function updateEnrollmentSchedule(
-  enrollmentId: number,
-  scheduleId: number
-) {
-  await db.update(enrollments).set({
-    scheduleId: scheduleId,
-    state: "pending",
-  }).where(eq(enrollments.id, enrollmentId));
+export async function updateEnrollmentSchedule(enrollmentId: number, scheduleId: number) {
+  await db
+    .update(enrollments)
+    .set({
+      scheduleId: scheduleId,
+      state: "pending",
+    })
+    .where(eq(enrollments.id, enrollmentId));
 }
-

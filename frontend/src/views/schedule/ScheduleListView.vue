@@ -6,9 +6,9 @@ import IconEdit from "@/components/icons/IconEdit.vue";
 import IconPlus from "@/components/icons/IconPlus.vue";
 import PaginationBar from "@/components/PaginationBar.vue";
 import { PUBLIC_API } from "@/services/main";
-import { computed, onMounted, ref } from "vue";
 import { useEditingScheduleStore } from "@/stores/working-schedule";
-import { useRouter, useRoute } from "vue-router";
+import { computed, onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 const editingSchedules = useEditingScheduleStore();
 const router = useRouter();
@@ -63,7 +63,7 @@ const selectSchedule = (schedule: Schedule) => {
   if (isSingleSelection.value) {
     // Single selection: Store in editingScheduleStore and redirect
     editingSchedules.schedule = schedule;
-    router.push("/enrollments/extend");
+    router.back();
   }
 };
 </script>
