@@ -1,41 +1,48 @@
 <script setup lang="ts">
 import BackButton from "@/components/BackButton.vue";
+import ErrorOverlay from "@/components/ErrorOverlay.vue";
+import FormField from "@/components/FormField.vue";
 import IconCheckmark from "@/components/icons/IconCheckmark.vue";
-import RadioGroup from "@/components/RadioGroup.vue";
-import TextField from "@/components/TextField.vue";
 import IconLoad from "@/components/icons/IconLoad.vue";
 import IconSchedule from "@/components/icons/IconSchedule.vue";
-import FormField from "@/components/FormField.vue";
-import { ref, computed } from "vue";
-import { useEditingScheduleStore, useWorkingSchedulesStore } from "@/stores/working-schedule";
-import { useEnrollmentDetailsStore } from "@/stores/enrollment-details";
-import { useRouter } from "vue-router";
+import RadioGroup from "@/components/RadioGroup.vue";
+import TextField from "@/components/TextField.vue";
 import { PUBLIC_API } from "@/services/main";
+import { useEnrollmentDetailsStore } from "@/stores/enrollment-details";
+import { useEditingScheduleStore } from "@/stores/working-schedule";
+import { computed, onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 
 const router = useRouter();
 const extensionType = ref("regular");
 const proofType = ref("");
 const proofInformation = ref("");
+
+const error = ref("");
+const errorMessage = ref("");
+
 // store đang giữ schedule được chọn
 const schedule = useEditingScheduleStore();
 const enrollmentStore = useEnrollmentDetailsStore();
 const currentEnrollment = computed(() => enrollmentStore.enrollment);
 
+onMounted(() => {
+  console.log(currentEnrollment.value);
+});
+
 const redirectToSchedulesSelect = () => {
   router.push("/schedules?mode=single");
 };
 
-// Handle saving the extension via API 
+// Handle saving the extension via API
 async function Save() {
-  console.log("Save button clicked");
-
   if (!schedule.schedule?.id || !currentEnrollment.value?.id) {
     console.error("Schedule ID or Enrollment ID is missing.");
     return;
   }
 
   const payload: any = {
-    enrollmentId: currentEnrollment.value.id, 
+    enrollmentId: currentEnrollment.value.id,
     scheduleId: schedule.schedule?.id,
   };
 
@@ -49,22 +56,32 @@ async function Save() {
   }
 
   try {
-    const response = await fetch(`${PUBLIC_API}/extension`, { 
+    const response = await fetch(`${PUBLIC_API}/extensions`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-      }, 
+      },
       body: JSON.stringify(payload),
+      credentials: "include",
+      mode: "cors",
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Failed to save extension:", errorData);
-      return;
+    const body = await response.json();
+    switch (response.status) {
+      case 400:
+        error.value = "Invalid Data";
+        errorMessage.value =
+          "Some data is invalid when submitting. Are you sure you're not winging it?";
+        break;
+      case 409:
+        error.value = "Invalid State";
+        errorMessage.value = body.message;
+        break;
+      case 201:
+        error.value = "";
+        router.replace({ path: "/enrollments/details" });
+        break;
     }
-    const result = await response.json();
-    console.log("Extension saved successfully:", result);
-    router.push("/enrollments/details");
   } catch (error) {
     console.error("An error occurred while saving the extension:", error);
   }
@@ -72,6 +89,8 @@ async function Save() {
 </script>
 
 <template>
+  <ErrorOverlay v-model:error="error" v-model:message="errorMessage" />
+
   <div class="flex w-full flex-col gap-4">
     <h1 class="text-center text-2xl font-bold">Add Extension</h1>
 

@@ -1,8 +1,15 @@
-import {postSpecialExtensionController} from "../controllers/entension.controller";
 import express from "express";
+import {
+  getExtensionController,
+  postExtensionController,
+} from "../controllers/extensions.controller";
+import { authenticate } from "../middlewares";
 
 const router = express.Router();
 
-router.post("/", postSpecialExtensionController);
+router
+  .route("/")
+  .get(authenticate(), getExtensionController)
+  .post(authenticate("acceptance"), postExtensionController);
 
-export { router as extensionRouter };   
+export { router as extensionRouter };

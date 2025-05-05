@@ -47,6 +47,40 @@ export async function getSchedules(page: number = 1) {
 }
 
 /**
+ * Retrieves the schedule by an ID.
+ *
+ * @param id the schedule id
+ * @returns the results array
+ */
+export async function getSchedule(id: number) {
+  return await db
+    .select({
+      id: schedules.id,
+      name: schedules.name,
+      startTime: schedules.startTime,
+      endTime: schedules.endTime,
+      location: schedules.location,
+      price: schedules.price,
+      count: sql<number>`count(distinct ${enrollments.id})`,
+      slots: schedules.slots,
+    })
+    .from(schedules)
+    .leftJoin(enrollments, eq(enrollments.scheduleId, schedules.id))
+    .where(eq(schedules.id, id))
+    .orderBy(asc(schedules.startTime))
+    .groupBy(
+      schedules.id,
+      schedules.name,
+      schedules.startTime,
+      schedules.endTime,
+      schedules.location,
+      schedules.price,
+      schedules.slots,
+    )
+    .limit(1);
+}
+
+/**
  * Creates a schedule.
  *
  * @param data the data object containing a schedule
