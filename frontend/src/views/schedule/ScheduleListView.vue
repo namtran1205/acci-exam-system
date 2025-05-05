@@ -7,6 +7,14 @@ import IconPlus from "@/components/icons/IconPlus.vue";
 import PaginationBar from "@/components/PaginationBar.vue";
 import { PUBLIC_API } from "@/services/main";
 import { computed, onMounted, ref } from "vue";
+import { useEditingScheduleStore } from "@/stores/working-schedule";
+import { useRouter, useRoute } from "vue-router";
+
+const editingSchedules = useEditingScheduleStore();
+const router = useRouter();
+const route = useRoute();
+
+const isSingleSelection = computed(() => route.query.mode === "single");
 
 async function fetchSchedules(page: number = 1) {
   const res = await fetch(`${PUBLIC_API}/schedules?page=${page}`, {
@@ -50,6 +58,14 @@ onMounted(async () => {
     await fetchSchedules(++current).then((next) => (data.value = [...data.value, ...next.results]));
   }
 });
+
+const selectSchedule = (schedule: Schedule) => {
+  if (isSingleSelection.value) {
+    // Single selection: Store in editingScheduleStore and redirect
+    editingSchedules.schedule = schedule;
+    router.push("/enrollments/extend");
+  }
+};
 </script>
 
 <template>
@@ -93,6 +109,7 @@ onMounted(async () => {
         v-for="schedule in displayedData"
         :schedule="schedule"
         :edit-mode="editMode"
+        @click="selectSchedule(schedule)"
       />
     </div>
 
